@@ -33,8 +33,10 @@ function mapUser(u: {
   id: string;
   email?: string;
   created_at?: string;
+  app_metadata?: Record<string, unknown>;
   user_metadata?: Record<string, unknown>;
 }): User {
+  const rawRole = u.app_metadata?.role ?? u.user_metadata?.role;
   return {
     id: u.id,
     email: u.email ?? "",
@@ -42,9 +44,11 @@ function mapUser(u: {
       typeof u.user_metadata?.name === "string"
         ? u.user_metadata.name
         : undefined,
+    role: rawRole === "admin" ? "admin" : "user",
     createdAt: u.created_at ?? new Date().toISOString(),
   };
 }
+
 
 function mapSession(
   s: {

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 
-const APP_ROUTES = ["/dashboard", "/settings", "/billing"];
+const APP_ROUTES = ["/dashboard", "/settings", "/billing", "/admin"];
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

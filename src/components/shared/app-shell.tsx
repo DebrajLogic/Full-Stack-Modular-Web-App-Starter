@@ -2,14 +2,25 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Settings, CreditCard, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  Settings,
+  CreditCard,
+  Shield,
+  LogOut,
+} from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Button } from "@/components/ui/button";
 
-const nav = [
+const userNav = [
   ["/dashboard", "Dashboard", LayoutDashboard],
   ["/settings", "Settings", Settings],
   ["/billing", "Billing", CreditCard],
+] as const;
+
+const adminNav = [
+  ["/admin", "Admin Overview", Shield],
+  ["/dashboard", "User Workspace", LayoutDashboard],
 ] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -17,12 +28,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { session, signOut } = useAuth();
 
+  const isAdmin = session?.user.role === "admin";
+  const inAdminSection = path.startsWith("/admin");
+
+  const nav = inAdminSection
+    ? adminNav
+    : isAdmin
+      ? [...userNav, ["/admin", "Admin Panel", Shield] as const]
+      : userNav;
+
   return (
     <div className="min-h-screen md:flex">
       <aside className="app-sidebar border-b p-4 md:min-h-screen md:w-60 md:border-b-0 md:border-r">
-        <Link href="/" className="font-semibold tracking-tight">
-          SaaS Starter
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link href="/" className="font-semibold tracking-tight">
+            SaaS Starter
+          </Link>
+          {isAdmin && (
+            <span className="pill-badge rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wider">
+              Admin
+            </span>
+          )}
+        </div>
 
         <nav className="mt-7 flex gap-2 md:flex-col">
           {nav.map(([href, label, Icon]) => (
@@ -33,7 +60,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 path === href ? "sidebar-link-active" : "sidebar-link"
               }`}
             >
-              <Icon size={16} />
+              <Icon className="size-[1em]" />
               {label}
             </Link>
           ))}
@@ -51,7 +78,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             router.push("/login");
           }}
         >
-          <LogOut size={15} />
+          <LogOut className="size-[1em]" />
           Sign out
         </Button>
       </aside>

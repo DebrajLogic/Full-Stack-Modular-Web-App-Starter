@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Layers, LogOut } from "lucide-react";
+import { Layers, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/providers/auth-provider";
 
@@ -19,6 +19,7 @@ export function Header() {
   const { session, signOut } = useAuth();
   const router = useRouter();
 
+  const isAdmin = session?.user.role === "admin";
   const initials = getInitials(
     session?.user.email,
     (session?.user as { name?: string } | undefined)?.name
@@ -47,12 +48,27 @@ export function Header() {
           <Link href="/settings" className="nav-link">
             Settings
           </Link>
+          {isAdmin && (
+            <Link href="/admin" className="nav-link">
+              Admin
+            </Link>
+          )}
         </nav>
       </div>
 
       <div className="flex items-center gap-3">
         {session ? (
           <>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="badge-admin inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] uppercase tracking-wider"
+              >
+                <Shield className="size-[1em]" />
+                <span>Admin</span>
+              </Link>
+            )}
+
             <Button
               variant="ghost"
               onClick={async () => {
@@ -65,9 +81,11 @@ export function Header() {
             </Button>
 
             <Link
-              href="/settings"
-              title={session.user.email}
-              className="user-avatar flex items-center justify-center rounded-full text-xs tracking-wider"
+              href={isAdmin ? "/admin" : "/settings"}
+              title={`${session.user.email} (${session.user.role})`}
+              className={`user-avatar flex items-center justify-center rounded-full text-xs tracking-wider ${
+                isAdmin ? "user-avatar-admin" : ""
+              }`}
             >
               {initials}
             </Link>

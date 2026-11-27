@@ -34,10 +34,12 @@ function requireUser() {
 }
 
 function user(email: string, name?: string): User {
+  const isAdmin = email.toLowerCase().includes("admin");
   return {
     id: "demo_" + email.toLowerCase().replace(/[^a-z0-9]/g, "_"),
     email,
     name,
+    role: isAdmin ? "admin" : "user",
     createdAt: new Date().toISOString(),
   };
 }

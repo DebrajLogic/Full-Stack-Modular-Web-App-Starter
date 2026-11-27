@@ -301,3 +301,41 @@
   border-color: var(--primary);
   background-color: var(--secondary-hover);
 }
+
+/* =========================================================
+   ADMIN AVATAR
+   ========================================================= */
+
+.user-avatar-admin {
+  border-color: rgba(245, 158, 11, 0.65);
+  background-color: rgba(245, 158, 11, 0.14);
+  color: #fbbf24;
+  box-shadow: 0 0 12px -2px rgba(245, 158, 11, 0.35);
+}
+.user-avatar-admin:hover {
+  border-color: #fbbf24;
+  background-color: rgba(245, 158, 11, 0.22);
+}
+
+.badge-admin {
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* =========================================================
+   FORM INPUTS
+   ========================================================= */
+.form-input {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
